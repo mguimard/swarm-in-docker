@@ -1,0 +1,40 @@
+# TODO : write portainer + 4 docker:dind containers
+version : '3.7'
+
+networks:
+  inception:
+
+volumes:
+  portainer_data:
+
+services:
+ 
+  portainer:
+    container_name: portainer
+    image: portainer/portainer
+    ports:
+      - 7000:9000
+    links:
+      - daemon1:daemon1
+      - daemon2:daemon2
+    networks: 
+      - inception
+
+  daemon1:
+    image: docker:dind
+    ports:
+      - 2375
+      - 6000-6100
+    networks:
+      - inception
+    privileged: true
+
+  
+  daemon2:
+    image: docker:dind
+    ports:
+      - 2375
+      - 6000-6100
+    networks:
+      - inception
+    privileged: true
