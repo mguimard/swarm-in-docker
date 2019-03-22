@@ -4,11 +4,18 @@ This project aims to ease a swarm setup inside a container, for testing purposes
 
 ## Setup
 
+Requirements
+
+* docker
+* docker-compose
+
+Clone this project and run `docker-compose up`
+
 ```sh
-$ docker build -t swarm-in-docker .
-$ docker run --name myswarm \
-    -p 7000-7100:7000-7100 \
-    --privileged \
-    -it -d \
-   swarm-in-docker
+$ git clone git@github.com:mguimard/swarm-in-docker.git
+$ cd swarm-in-docker
+$ docker-compose up
 ```
+
+Navigate to http://localhost:7000
+

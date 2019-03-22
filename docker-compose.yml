@@ -25,6 +25,8 @@ services:
     ports:
       - 2375
       - 6000-6100
+    volumes:
+      - ./scripts/swarm-init.sh:/swarm-init.sh
     networks:
       - inception
     privileged: true
