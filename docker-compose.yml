@@ -1,42 +1,89 @@
-# TODO : write portainer + 4 docker:dind containers
 version : '3.7'
 
 networks:
-  inception:
+  swarm:
 
 volumes:
   portainer_data:
+  manager1_local_sock:
+  tokens:
 
 services:
  
+  # Portainer - swarm manager
   portainer:
     container_name: portainer
     image: portainer/portainer
     ports:
       - 7000:9000
     links:
-      - daemon1:daemon1
-      - daemon2:daemon2
+      - manager1:manager1
+      - worker1:worker1
+      - worker2:worker2
+    depends_on:
+      - manager1
+      - worker1
+      - worker2
     networks: 
-      - inception
+      - swarm
 
-  daemon1:
+  # Swarmpit - Lightweight mobile-friendly Docker Swarm management UI
+  swarmpit:
+    container_name: swarmpit
+    image: swarmpit/install:1.6
+    ports:
+      - 7001:888
+    links:
+      - manager1:manager1
+      - worker1:worker1
+      - worker2:worker2
+    volumes:
+      - manager1_local_sock:/var/run
+    depends_on:
+      - manager1
+
+  # Manager node
+  manager1:
+    container_name: manager1
     image: docker:dind
     ports:
       - 2375
+      - 2377
       - 6000-6100
     volumes:
       - ./scripts/swarm-init.sh:/swarm-init.sh
+      - manager1_local_sock:/var/run
+      - tokens:/tokens
     networks:
-      - inception
+      - swarm
     privileged: true
 
-  
-  daemon2:
+  # Worker node 1
+  worker1:
+    container_name: worker1
     image: docker:dind
     ports:
       - 2375
+      - 2377
       - 6000-6100
+    volumes:
+      - ./scripts/swarm-join.sh:/swarm-join.sh
+      - tokens:/tokens
     networks:
-      - inception
+      - swarm
+    privileged: true
+
+  # Worker node 2
+  worker2:
+    container_name: worker2
+    image: docker:dind
+    ports:
+      - 2375
+      - 2377
+      - 6000-6100
+    volumes:
+      - ./scripts/swarm-join.sh:/swarm-join.sh
+      - tokens:/tokens
+    networks:
+      - swarm
     privileged: true

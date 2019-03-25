@@ -14,8 +14,14 @@ Clone this project and run `docker-compose up`
 ```sh
 $ git clone git@github.com:mguimard/swarm-in-docker.git
 $ cd swarm-in-docker
-$ docker-compose up
+$ sh start.sh
 ```
 
-Navigate to http://localhost:7000
+Navigate to http://localhost:7000 and configure the manager node endpoint
+
+* Name: manager1
+* Endpoint URL: manager1:2375
+* Public IP: manager1
+
+
 
