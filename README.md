@@ -9,7 +9,7 @@ Requirements
 * docker
 * docker-compose
 
-Clone this project and run the following commands
+Use the following commands to start the swarm
 
 ```sh
 $ git clone git@github.com:mguimard/swarm-in-docker.git
